@@ -18,9 +18,9 @@ public class Users{
     public Users() {
     }
 
-    public Users(String firstName, String lastName) {
-        this.firstName = firstName;
-        this.lastMessage = lastName;
+    public Users(String userId, String userName) {
+        this.userId = userId;
+        this.userName = userName;
     }
 
     public Users(String firstName, String lastName, String email){
@@ -51,7 +51,7 @@ public class Users{
     }
 
     public void setUserName(String firstName, String LastName) {
-        this.userName = firstName + " " + lastName;
+        this.userName = firstName + " " + LastName;
     }
 
     public String getShareCode() {

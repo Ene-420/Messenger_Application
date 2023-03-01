@@ -49,6 +49,7 @@ public class ChatsFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_chats, container, false);
         recyclerView = view.findViewById(R.id.chatRecyclerView);
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         chatList = getData();
         adapter = new UsersAdapter(chatList, getContext());
         recyclerView.setAdapter(adapter);
