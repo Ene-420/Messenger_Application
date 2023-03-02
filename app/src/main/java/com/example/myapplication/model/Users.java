@@ -29,6 +29,7 @@ public class Users{
         this.shareCode = setShareCode();
     }
 
+
     public Users(String userId, String firstName, String lastName, String lastMessage, boolean read) {
         this.userName = firstName + " "+ lastName;
         this.userId = userId;
@@ -53,6 +54,11 @@ public class Users{
     public void setUserName(String firstName, String LastName) {
         this.userName = firstName + " " + LastName;
     }
+
+    public void setUserName(String name) {
+        this.userName = name;
+    }
+
 
     public String getShareCode() {
         return shareCode;

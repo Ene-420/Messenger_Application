@@ -41,7 +41,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Users users = list.get(position);
         //Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.face).into(holder.image);
-        holder.userName.setText(users.getFirstName());
+        holder.userName.setText(users.getUserName());
         holder.lastMessage.setText(users.getLastMessage());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +50,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 Intent intent = new Intent(context, chatPageActivity.class);
                 intent.putExtra("userId",users.getUserId());
                 intent.putExtra("profilePic", users.getProfilePic());
-                intent.putExtra("userName", users.getFirstName());
+                intent.putExtra("userName", users.getUserName());
                 context.startActivity(intent);
             }
         });

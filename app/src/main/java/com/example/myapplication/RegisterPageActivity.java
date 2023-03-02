@@ -69,14 +69,31 @@ public class RegisterPageActivity extends AppCompatActivity {
                                         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                                             for(DataSnapshot data : snapshot.getChildren() ){
                                                 String key = snapshot.getKey();
-                                                String code = snapshot.child("shareCode").getValue().toString();
+                                                String code =  snapshot.child("shareCode").getValue(String.class);
+                                                String username = snapshot.child("userName").getValue(String.class);
+                                                String enteredCode = shareCode.getText().toString();
                                                 try {
-                                                    if (code.equals(shareCode.getText().toString())) {
-                                                        Users user = new Users();
-                                                        user.setUserName(firstNameText.getText().toString(), lastNameText.getText().toString());
-                                                        user.setUserId(task.getResult().getUser().getUid());
-                                                        database.getReference().child("Users").child(key)
-                                                                .child("Contacts").setValue(user);
+                                                    if ((shareCode.getText().toString().equals(code))) {
+                                                        Users user = new Users(firstNameText.getText().toString(), lastNameText.getText().toString(), emailText.getText().toString());
+                                                        String contactId = task.getResult().getUser().getUid();
+                                                        database.getReference().child("Users").child(contactId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<Void> task) {
+                                                                database.getReference().child("Users").child(key)
+                                                                        .child("Contacts").child(contactId).setValue(user.getUserName());
+
+                                                                Users oldUser = new Users();
+                                                                oldUser.setUserName(username);
+                                                                database.getReference().child("Users").child(contactId).child("Contacts").child(key).setValue(oldUser);
+                                                            }
+                                                        });
+
+                                                        Toast.makeText(RegisterPageActivity.this, "Account Created", Toast.LENGTH_LONG).show();
+
+                                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                        startActivity(intent);
+
+
                                                     }
                                                 }catch(Exception e){
                                                     e.printStackTrace();
@@ -87,24 +104,29 @@ public class RegisterPageActivity extends AppCompatActivity {
                                         @Override
                                         public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                                            String userId = snapshot.getKey();
-                                            String username = snapshot.child("userName").getValue().toString();
 
-                                            Users users = new Users(firstNameText.getText().toString(), lastNameText.getText().toString(), emailText.getText().toString());
-                                            String id = task.getResult().getUser().getUid();
-                                            database.getReference().child("Users").child(id).setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    if(task.isSuccessful()) {
-                                                        database.getReference().child("Users").child(id).child("Contacts").setValue(new Users(userId, username));
+                      /*                      String updatedContactId = snapshot.getKey();
+                                            for(DataSnapshot data : snapshot.getChildren()) {
+                                                String userId = snapshot.getKey();
+                                                String username = snapshot.child("userName").getValue().toString();
+
+                                                Users users = new Users(firstNameText.getText().toString(), lastNameText.getText().toString(), emailText.getText().toString());
+                                                String id = task.getResult().getUser().getUid();
+                                                database.getReference().child("Users").child(id).setValue(users);
+
+                                                database.getReference().child("Users").child(id).child("Contacts").setValue(new Users(userId, username)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        String userName = database.getReference().child("Users").child(updatedContactId).getKey();
                                                     }
-                                                }
-                                            });
+                                                });
 
+
+                                            }
                                             Toast.makeText(RegisterPageActivity.this, "Account Created", Toast.LENGTH_LONG).show();
 
                                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                            startActivity(intent);
+                                            startActivity(intent);*/
                                         }
 
                                         @Override

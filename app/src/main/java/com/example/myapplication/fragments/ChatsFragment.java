@@ -50,7 +50,7 @@ public class ChatsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.chatRecyclerView);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        chatList = getData();
+        //chatList = getData();
         adapter = new UsersAdapter(chatList, getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
@@ -74,6 +74,7 @@ public class ChatsFragment extends Fragment {
             }
         });
 
+        System.out.println(chatList.size());
         return view;
     }
 
