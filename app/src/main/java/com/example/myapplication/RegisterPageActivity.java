@@ -71,7 +71,7 @@ public class RegisterPageActivity extends AppCompatActivity {
                                                 String key = snapshot.getKey();
                                                 String code =  snapshot.child("shareCode").getValue(String.class);
                                                 String username = snapshot.child("userName").getValue(String.class);
-                                                String enteredCode = shareCode.getText().toString();
+                                                String email = snapshot.child("email").getValue(String.class);
                                                 try {
                                                     if ((shareCode.getText().toString().equals(code))) {
                                                         Users user = new Users(firstNameText.getText().toString(), lastNameText.getText().toString(), emailText.getText().toString());
@@ -80,10 +80,11 @@ public class RegisterPageActivity extends AppCompatActivity {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 database.getReference().child("Users").child(key)
-                                                                        .child("Contacts").child(contactId).setValue(user.getUserName());
+                                                                        .child("Contacts").child(contactId).setValue(new Users(user.getEmail(), user.getUserName()));
 
                                                                 Users oldUser = new Users();
                                                                 oldUser.setUserName(username);
+                                                                oldUser.setEmail(email);
                                                                 database.getReference().child("Users").child(contactId).child("Contacts").child(key).setValue(oldUser);
                                                             }
                                                         });

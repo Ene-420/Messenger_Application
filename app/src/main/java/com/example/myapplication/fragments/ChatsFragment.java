@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.example.myapplication.Adapter.UsersAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Users;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +30,8 @@ public class ChatsFragment extends Fragment {
 
 
     UsersAdapter adapter;
+    FirebaseAuth auth;
+
     RecyclerView recyclerView;
     FirebaseDatabase database;
 
@@ -49,21 +52,28 @@ public class ChatsFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_chats, container, false);
         recyclerView = view.findViewById(R.id.chatRecyclerView);
 
+        auth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         //chatList = getData();
         adapter = new UsersAdapter(chatList, getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Users").child(auth.getCurrentUser().getUid()).child("Contacts").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    Users users = dataSnapshot.getValue(Users.class);
-                    users.setUserId(dataSnapshot.getKey());
-                    chatList.add(users);
+                    if(dataSnapshot.child("Chats").getValue() == null) {
+                        System.out.println("Nothing to print");
+                    }
+                    else {
+                        System.out.println("Chats " + dataSnapshot.child("Chats").getValue() + " " + dataSnapshot.getKey());
+                        Users users = dataSnapshot.getValue(Users.class);
+                        users.setUserId(dataSnapshot.getKey());
+                        chatList.add(users);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }

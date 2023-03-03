@@ -17,6 +17,11 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(moveToRegister);
     }
 
+    public void moveToLoginPage(View view){
+        Intent moveToLogin = new Intent(getApplicationContext(),LoginPageActivity.class);
+        startActivity(moveToLogin);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

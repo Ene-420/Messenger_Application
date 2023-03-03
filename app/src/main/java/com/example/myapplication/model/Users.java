@@ -18,8 +18,8 @@ public class Users{
     public Users() {
     }
 
-    public Users(String userId, String userName) {
-        this.userId = userId;
+    public Users(String email, String userName) {
+        this.email = email;
         this.userName = userName;
     }
 
@@ -37,11 +37,11 @@ public class Users{
         this.read = read;
     }
 
-    public Users(String profilePic, String firstName, String lastName, String phoneNumber, String userId, String lastMessage, String status) {
+    public Users(String profilePic, String firstName, String lastName, String email, String userId, String lastMessage, String status) {
         this.profilePic = profilePic;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = phoneNumber;
+        this.email = email;
         this.userId = userId;
         this.lastMessage = lastMessage;
         this.status = status;
@@ -94,12 +94,12 @@ public class Users{
         this.lastName = lastName;
     }
 
-    public String getPhoneNumber() {
+    public String getEmail() {
         return email;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.email = phoneNumber;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getUserId() {

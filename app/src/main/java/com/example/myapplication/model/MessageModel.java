@@ -4,6 +4,9 @@ public class MessageModel {
     private String userId;
     private String message;
     private String messageId;
+    private Long timeStamp;
+    private String visibility;
+
 
     public MessageModel(String userId, String message,  Long timeStamp) {
         this.userId = userId;
@@ -11,12 +14,19 @@ public class MessageModel {
         this.timeStamp = timeStamp;
     }
 
-    private Long timeStamp;
+    public MessageModel(String userId, String message, String messageId, Long timeStamp, String visibility) {
+        this.userId = userId;
+        this.message = message;
+        this.messageId = messageId;
+        this.timeStamp = timeStamp;
+        this.visibility = visibility;
+    }
 
     public MessageModel(String userId, String message) {
         this.userId = userId;
         this.message = message;
     }
+
 
     public MessageModel() {
     }
@@ -51,5 +61,13 @@ public class MessageModel {
 
     public void setTimeStamp(Long timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
     }
 }

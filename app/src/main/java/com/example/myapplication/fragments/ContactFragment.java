@@ -8,13 +8,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.security.keystore.StrongBoxUnavailableException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.Adapter.ContactAdapter;
-import com.example.myapplication.Adapter.UsersAdapter;
 import com.example.myapplication.R;
 import com.example.myapplication.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +21,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +34,6 @@ public class ContactFragment extends Fragment {
     ArrayList<Users> contactList = new ArrayList<>();
     FirebaseUser user;
     FirebaseDatabase database;
-    Map<String,Users> contactListFromDb;
 
     public ContactFragment() {
         // Required empty public constructor
@@ -56,8 +52,6 @@ public class ContactFragment extends Fragment {
         database =  FirebaseDatabase.getInstance();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        contactListFromDb = new HashMap<>();
-
 
         adapter = new ContactAdapter(contactList, getContext());
         recyclerView.setAdapter(adapter);
@@ -65,18 +59,53 @@ public class ContactFragment extends Fragment {
 
 
 
-        database.getReference().child("Users").child(user.getUid()).orderByChild("Contacts").addChildEventListener(new ChildEventListener() {
+        database.getReference().child("Users").child(user.getUid()).child("Contacts")
+/*                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for(DataSnapshot data : snapshot.getChildren()){
+                            System.out.println(data.child("Contacts").getValue());
+
+//                    Users contacts = data.getValue(Users.class);
+//                    contacts.setUserId(data.getKey());
+//                    contactList.add(contacts);
+//                    System.out.println("UserName"+ contacts.getUserName());
+
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });*/
+
+                .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 //contactList.clear();
-                for(DataSnapshot data : snapshot.getChildren()){
 
+//                Users contacts = snapshot.getValue(Users.class);
+//                System.out.println(contacts.getUserName());
+                Users contactListFrmDB = snapshot.getValue(Users.class);
+                contactListFrmDB.setUserId(snapshot.getKey());
+                contactList.add(contactListFrmDB);
+
+/*                for(Users data : snapshot.getValue(Users.class)){
+                    //System.out.println(data.getValue());
+                    Users contacts = snapshot.getValue(Users.class);
+                    System.out.println(contacts.getUserName());
+                    contactList.add(contacts);
+
+*//*                    //Users contacts = new Users();
                     Users contacts = data.getValue(Users.class);
+                    //contacts.setUserName(contactsName);
                     contacts.setUserId(data.getKey());
                     contactList.add(contacts);
-                    System.out.println("UserName"+ contacts.getUserName());
+                    System.out.println("UserName"+ contacts.getUserName());*//*
 
-                }
+                }*/
                 adapter.notifyDataSetChanged();
             }
 
