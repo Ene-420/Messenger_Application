@@ -79,13 +79,13 @@ public class RegisterPageActivity extends AppCompatActivity {
                                                         database.getReference().child("Users").child(contactId).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
-                                                                database.getReference().child("Users").child(key)
-                                                                        .child("Contacts").child(contactId).setValue(new Users(user.getEmail(), user.getUserName()));
+                                                                database.getReference().child("Contacts").child(key)
+                                                                        .child(contactId).setValue(new Users(user.getEmail(), user.getUserName()));
 
                                                                 Users oldUser = new Users();
                                                                 oldUser.setUserName(username);
                                                                 oldUser.setEmail(email);
-                                                                database.getReference().child("Users").child(contactId).child("Contacts").child(key).setValue(oldUser);
+                                                                database.getReference().child("Contacts").child(contactId).child(key).setValue(oldUser);
                                                             }
                                                         });
 

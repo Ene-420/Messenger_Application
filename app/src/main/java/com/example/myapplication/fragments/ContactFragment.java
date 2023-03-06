@@ -59,53 +59,15 @@ public class ContactFragment extends Fragment {
 
 
 
-        database.getReference().child("Users").child(user.getUid()).child("Contacts")
-/*                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot data : snapshot.getChildren()){
-                            System.out.println(data.child("Contacts").getValue());
-
-//                    Users contacts = data.getValue(Users.class);
-//                    contacts.setUserId(data.getKey());
-//                    contactList.add(contacts);
-//                    System.out.println("UserName"+ contacts.getUserName());
-
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });*/
-
+        database.getReference().child("Contacts").child(user.getUid())
                 .addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                //contactList.clear();
 
-//                Users contacts = snapshot.getValue(Users.class);
-//                System.out.println(contacts.getUserName());
                 Users contactListFrmDB = snapshot.getValue(Users.class);
                 contactListFrmDB.setUserId(snapshot.getKey());
                 contactList.add(contactListFrmDB);
 
-/*                for(Users data : snapshot.getValue(Users.class)){
-                    //System.out.println(data.getValue());
-                    Users contacts = snapshot.getValue(Users.class);
-                    System.out.println(contacts.getUserName());
-                    contactList.add(contacts);
-
-*//*                    //Users contacts = new Users();
-                    Users contacts = data.getValue(Users.class);
-                    //contacts.setUserName(contactsName);
-                    contacts.setUserId(data.getKey());
-                    contactList.add(contacts);
-                    System.out.println("UserName"+ contacts.getUserName());*//*
-
-                }*/
                 adapter.notifyDataSetChanged();
             }
 

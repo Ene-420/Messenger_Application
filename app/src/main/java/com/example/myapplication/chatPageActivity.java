@@ -93,8 +93,8 @@ public class chatPageActivity extends AppCompatActivity {
         final String outgoing = receivedId + senderId;
         final String incoming = senderId + receivedId;
 
-        database.getReference("Users").child(senderId).child("Contacts").child(receivedId)
-                        .child("Chats").addValueEventListener(new ValueEventListener() {
+        database.getReference("Chats").child(senderId).child(receivedId)
+                        .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         messageModels.clear();
@@ -121,14 +121,13 @@ public class chatPageActivity extends AppCompatActivity {
 
                 message.setText("");
 
-                database.getReference().child("Users").child(senderId)
-                        .child("Contacts").child(receivedId).child("Chats")
+                database.getReference().child("Chats").child(senderId)
+                        .child(receivedId)
                         .push().setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                database.getReference().child("Users").child(receivedId).child("Contacts")
-                                        .child(senderId).child("Chats")
-                                        .push().setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                database.getReference().child("Chats").child(receivedId)
+                                        .child(senderId).push().setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
 

@@ -2,6 +2,7 @@ package com.example.myapplication.fragments;
 
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ public class ChatsFragment extends Fragment {
     }
     //ragmentChatsBinding binding;
     ArrayList<Users> chatList = new ArrayList<>();
+    ArrayList<String> userIds;
 
 
 
@@ -52,6 +54,7 @@ public class ChatsFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_chats, container, false);
         recyclerView = view.findViewById(R.id.chatRecyclerView);
 
+        userIds = new ArrayList<>();
         auth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         //chatList = getData();
@@ -59,31 +62,54 @@ public class ChatsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        database.getReference().child("Users").child(auth.getCurrentUser().getUid()).child("Contacts").addValueEventListener(new ValueEventListener() {
+        database.getReference().child("Chats").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 chatList.clear();
 
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    if(dataSnapshot.child("Chats").getValue() == null) {
+                    if(dataSnapshot.getValue() == null) {
                         System.out.println("Nothing to print");
                     }
                     else {
-                        System.out.println("Chats " + dataSnapshot.child("Chats").getValue() + " " + dataSnapshot.getKey());
-                        Users users = dataSnapshot.getValue(Users.class);
-                        users.setUserId(dataSnapshot.getKey());
-                        chatList.add(users);
+                        //System.out.println("Chats " + dataSnapshot.getValue() + " " + dataSnapshot.getKey());
+
+                        String userId= dataSnapshot.getKey();
+                        database.getReference().child("Users").child(userId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Users users = snapshot.getValue(Users.class);
+                                users.setUserId(snapshot.getKey());
+                                System.out.println("userName " + users.getUserName());
+                                chatList.add(users);
+                                System.out.println(chatList.get(0).getEmail());
+
+                                adapter.notifyDataSetChanged();
+                            }
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+
                     }
                 }
-                adapter.notifyDataSetChanged();
+                //adapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
 
+        for(int i=0; i<= userIds.size(); i++) {
+
+        }
         System.out.println(chatList.size());
         return view;
     }
