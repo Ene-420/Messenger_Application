@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 
 import com.example.myapplication.Adapter.UsersAdapter;
 import com.example.myapplication.R;
+import com.example.myapplication.model.MessageModel;
 import com.example.myapplication.model.Users;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -25,6 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarOutputStream;
 
 
 public class ChatsFragment extends Fragment {
@@ -42,6 +44,7 @@ public class ChatsFragment extends Fragment {
     //ragmentChatsBinding binding;
     ArrayList<Users> chatList = new ArrayList<>();
     ArrayList<String> userIds;
+    Long timeStamp = 0L;
 
 
 
@@ -82,10 +85,31 @@ public class ChatsFragment extends Fragment {
                                 Users users = snapshot.getValue(Users.class);
                                 users.setUserId(snapshot.getKey());
                                 System.out.println("userName " + users.getUserName());
-                                chatList.add(users);
-                                System.out.println(chatList.get(0).getEmail());
 
-                                adapter.notifyDataSetChanged();
+
+                                database.getReference().child("Chats").child(auth.getCurrentUser().getUid()).child(userId).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        for(DataSnapshot data : snapshot.getChildren() ){
+                                            MessageModel model = data.getValue(MessageModel.class);
+                                            if(model.getTimeStamp() > timeStamp){
+                                                timeStamp = model.getTimeStamp();
+                                                users.setLastMessage(model.getMessage());
+
+                                            }
+                                            System.out.println("Last Message "+ users.getLastMessage() );
+                                        }
+                                        chatList.add(users);
+                                        adapter.notifyDataSetChanged();
+                                    }
+
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
                             }
 
 
@@ -95,36 +119,18 @@ public class ChatsFragment extends Fragment {
                             }
                         });
 
-
-
                     }
                 }
-                //adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
-        for(int i=0; i<= userIds.size(); i++) {
-
-        }
         System.out.println(chatList.size());
         return view;
     }
 
-    private ArrayList<Users> getData()
-    {
-/*        ArrayList<Users> list = new ArrayList<>();
-        list.add(new Users("May",
-                "Best Of Luck"));
-        list.add(new Users("Maki",
-                "b of l"));
-        list.add(new Users("lay",
-                "This is testing exam .."));
 
-        return list;*/
-        return new ArrayList<>();
-    }
+
 }
