@@ -3,6 +3,7 @@ package com.example.myapplication.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -55,6 +56,7 @@ public class ChatsFragment extends Fragment {
         // Inflate the layout for this fragment
 
         View view =inflater.inflate(R.layout.fragment_chats, container, false);
+        getActivity().setTitle("Chats");
         recyclerView = view.findViewById(R.id.chatRecyclerView);
 
         userIds = new ArrayList<>();
@@ -64,6 +66,8 @@ public class ChatsFragment extends Fragment {
         adapter = new UsersAdapter(chatList, getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+
 
         database.getReference().child("Chats").child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
@@ -130,6 +134,19 @@ public class ChatsFragment extends Fragment {
         System.out.println(chatList.size());
         return view;
     }
+
+    /*@Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode==2)
+        {
+            String message=data.getStringExtra("LastMessage");
+            System.out.println("LastMessage "+message);
+        }
+
+    }*/
+
 
 
 

@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.myapplication.Adapter.ChatAdapter;
+import com.example.myapplication.fragments.ChatsFragment;
 import com.example.myapplication.model.MessageModel;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,10 +36,18 @@ public class chatPageActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseDatabase database;
     ImageView sendMessage, cameraIcon;
+    String lastMessage = "";
 
+    Fragment selectFragment;
 
     public void backButton(View view){
+
+
         finish();
+        recreate();
+        //startActivity(getIntent());
+
+
     }
 
     public void cameraClick(View view){
@@ -103,6 +113,7 @@ public class chatPageActivity extends AppCompatActivity {
                             model.setMessageId(data.getKey());
                             messageModels.add(model);
                         }
+                        lastMessage = messageModels.get(messageModels.size() - 1).getMessage();
                         chatAdapter.notifyDataSetChanged();
                     }
 
@@ -141,6 +152,8 @@ public class chatPageActivity extends AppCompatActivity {
 
             }
         });
+
+
 
 
     }

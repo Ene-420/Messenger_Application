@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.myapplication">
 
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,6 +19,18 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".AddContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UpdateContactActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ShareCodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginPageActivity"
             android:exported="false" />
         <activity
@@ -27,7 +38,8 @@
             android:exported="false" />
         <activity
             android:name=".chatPageActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -48,7 +60,8 @@
             android:exported="true" />
         <activity
             android:name=".RegisterPageActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".RegisterActivity"
             android:exported="true">

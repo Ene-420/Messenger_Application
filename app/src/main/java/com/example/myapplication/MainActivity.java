@@ -2,9 +2,11 @@ package com.example.myapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.INotificationSideChannel;
 import android.view.Menu;
@@ -16,9 +18,11 @@ import com.example.myapplication.fragments.ContactFragment;
 import com.example.myapplication.fragments.FeedFragment;
 import com.example.myapplication.fragments.MapsFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
+    Toolbar toolbar;
     BottomNavigationView bottomNavigationView;
     Fragment selectFragment;
 
@@ -37,9 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.logOut:
+                FirebaseAuth.getInstance().signOut();
                 break;
 
             case R.id.shareCode:
@@ -56,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.nav_chats);

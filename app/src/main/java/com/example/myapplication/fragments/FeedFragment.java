@@ -55,6 +55,7 @@ public class FeedFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
+        getActivity().setTitle("Feed");
         auth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
         recyclerView = view.findViewById(R.id.feedRecyclerView);

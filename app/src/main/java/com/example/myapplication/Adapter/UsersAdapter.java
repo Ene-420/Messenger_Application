@@ -1,6 +1,7 @@
 package com.example.myapplication.Adapter;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -40,6 +41,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Users users = list.get(position);
+
         //Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.face).into(holder.image);
         holder.userName.setText(users.getUserName());
         holder.lastMessage.setText(users.getLastMessage());
@@ -51,7 +53,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 intent.putExtra("userId",users.getUserId());
                 intent.putExtra("profilePic", users.getProfilePic());
                 intent.putExtra("userName", users.getUserName());
-                context.startActivity(intent);
+                ((Activity)context).startActivityForResult(intent, 2);
+
             }
         });
     }
@@ -60,6 +63,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     public int getItemCount() {
         return list.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

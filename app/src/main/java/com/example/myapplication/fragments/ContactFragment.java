@@ -1,9 +1,11 @@
 package com.example.myapplication.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,6 +52,7 @@ public class ContactFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_contact, container, false);
+        getActivity().setTitle("Contacts");
         recyclerView = view.findViewById(R.id.contactRecyclerView);
         database =  FirebaseDatabase.getInstance();
 
@@ -61,12 +66,14 @@ public class ContactFragment extends Fragment {
 
         database.getReference().child("Contacts").child(user.getUid())
                 .addChildEventListener(new ChildEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                 Users contactListFrmDB = snapshot.getValue(Users.class);
                 contactListFrmDB.setUserId(snapshot.getKey());
                 contactList.add(contactListFrmDB);
+                Collections.sort(contactList, Comparator.comparing(Users::getUserName));
 
                 adapter.notifyDataSetChanged();
             }
